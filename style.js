@@ -6,10 +6,15 @@
   fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
     .then((res) => res.json())
     .then((data) =>{
-      removeActiveClass()
-      const activeBtn=document.getElementById(`btn ${id}`);
-      // activeBtn.classList.add("active");
       videosCategories(data.category);
+      console.log(data);
+      removeActiveClass()
+      if(data.status){
+        let activeBtn=document.getElementById(`btn-${id}`);
+        console.log(id);
+        activeBtn.classList.remove("active")
+       activeBtn?.classList.add("active")
+      }
       
     })
     .catch((error) => console.log(error));
@@ -17,14 +22,13 @@
 
 
 };
-
 const  removeActiveClass= ()=>{
  const buttons=document.getElementsByClassName("category-btn")
   console.log(buttons);
-  for(let btn of buttons){
+   for(let btn of buttons){
      btn.classList.remove("active")
 
-  }
+   }
 };
 
 
@@ -46,12 +50,23 @@ const  removeActiveClass= ()=>{
  
 /// fetch data
 
-  fetch("https://openapi.programming-hero.com/api/phero-tube/categories")
+  fetch(`https://openapi.programming-hero.com/api/phero-tube/categories/`)
   .then((res) => res.json())
   .then((data) => displayCategories(data.categories))
   .catch((error) => console.log(error));
  }
 
+
+
+ const lodeDetails = async (videoId) =>{
+   console.log(videoId);
+    const uri =`https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`;
+     const res = await fetch(uri);
+      const data =await res.json()
+       console.log(data);
+
+ }
+ 
 
 
 //  {category_id: '1001', category: 'Music'}
@@ -62,12 +77,12 @@ const  removeActiveClass= ()=>{
 // : 
 // "1001"
 
- const displayCategories = (categories) =>{
+//  const displayCategories = (categories) =>{
 
-  const categoriesButton=document.getElementById("categories");
+//   const categoriesButton=document.getElementById("categories");
 
-  categories.forEach(item => {
-     console.log(item);
+//   categories.forEach(item => {
+//      console.log(item);
 
 
 
@@ -79,7 +94,8 @@ const  removeActiveClass= ()=>{
       const buttonContainer =document.createElement("div")
      
      buttonContainer.innerHTML=
-     ` <button id="btn-${item.category_id}"onclick="lodeCategoriesVideos(${item.category_id})"class="btn  category-btn">
+     ` <button id="btn-${item.category_id}"onclick="lodeCategoriesVideos(${item.category_id})"
+     class="btn  category-btn">
      ${item.category}
      </button>`
      
@@ -110,20 +126,20 @@ const  removeActiveClass= ()=>{
 
 
  //lode videos
-const lodVideo= () =>{
+const lodVideo= (video) =>{
   fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
     .then((res) => res.json())
-    .then((data) =>videosCategories(data.videos))
+    .then((data) =>videosCategories(data.video))
     .catch((error) => console.log(error));
    }
 
 
-   const videosCategories =(videos) =>{
+   const videosCategories =(video) =>{
     const videosContainer=document.getElementById("videos")
     videosContainer.innerHTML="";
-    if(videos.length ===0){
+    if(video.length ===0){
       videosContainer.classList.remove("grid")
-      videosContainer.innerHTML=`
+      videosContainer.innerHTML=`F
       <div class=" min-h-screen flex flex-col gap-5 justify-center items-center"> 
       <img src="icon.png" /> 
       <h1 class="text-center  text-xl font-bold"> content here is these</h1>
@@ -133,8 +149,8 @@ const lodVideo= () =>{
     else{
       videosContainer.classList.add("grid")
     }
-    videos.forEach((video) =>{
-      console.log(video);
+    video.forEach((video) =>{
+    //console.log(video);
     const card =document.createElement("div")
     card.classList="card card-compact "
     card.innerHTML=`
@@ -157,7 +173,7 @@ const lodVideo= () =>{
   ${video.authors[0].verified === true ? ' <img class="w-5 m-3" src="https://img.icons8.com/?size=48&id=D9RtvkuOe31p&format=png" />' : ""}
    
    </div>
-   <p></p>
+   <p> <button  onclick="lodeDetails('${video.video_id}')" class="btn btn-sm  btn-error  ">Details</button> </p>
   </div>
   </div>
   
