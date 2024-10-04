@@ -143,7 +143,7 @@
         videosContainer.classList.remove("grid")
         videosContainer.innerHTML=`F
         <div class=" min-h-screen flex flex-col gap-5 justify-center items-center"> 
-        <img src="icon.png" /> 
+        <img src="./icon.png" /> 
         <h1 class="text-center  text-xl font-bold"> content here is these</h1>
         </div>`;
         return;
